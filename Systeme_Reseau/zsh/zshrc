@@ -1,0 +1,204 @@
+#############################
+# Variables d'environnement #
+#############################
+## Terminal en 256 couleurs
+export TERM="xterm-256color"
+
+## Langue
+export LANG="fr_FR.UTF-8"
+export LC_ALL="fr_FR.UTF-8"
+
+## Modification du PATH
+export PATH=/usr/bin:${PATH}:/usr/local/bin:/opt:/home/<login>/bin:.
+## PATH pour pyenv
+export PATH=${PATH}:/home/<login>/.pyenv/bin
+
+## Pour Python compilé depuis les sources
+export LD_LIBRARY_PATH=/usr/local/lib
+
+## Pour CUDA et cuDNN (Deep Neural Network)
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
+
+## Path pour Oh My Zsh !
+export ZSH=/home/<login>/.oh-my-zsh
+
+## Éditeur par défaut
+export EDITOR=/usr/bin/vim
+export VISUAL=/usr/bin/vim
+
+## Répertoire pour paquetages LaTeX
+export TEXMFHOME=~/.texmf
+
+## Configuration Downfall
+export DF_ROOT=/home/<login>/Documents/info2dev/Developpement/downfall
+export DF_REPOSITORY=/home/<login>/Documents/info2dev/Formation/DF_Repository
+
+
+
+######################
+# Thème PowerLevel9k #
+######################
+## Thème
+ZSH_THEME="powerlevel9k/powerlevel9k"
+
+## Configuration PowerLevel9k
+POWERLEVEL9K_MODE="nerdfont-complete"
+
+## Chargement des segments externes
+POWERLEVEL9K_EXTERNAL_SEGMENTS="${HOME}/.powerlevel9k/segments"
+source "${POWERLEVEL9K_EXTERNAL_SEGMENTS}/loader.zsh"
+load_segments 'air_quality_no2'
+
+## Configuration du prompt
+### Deuxième ligne de prompt
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+## Préfixe des deux lignes (la flèche tordue)
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\u256d\u2500 "
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\u2570\uf460 "
+## Saut de ligne entre chaque prompt
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+
+## Segment avec Logo Debian custom_debian_icon
+POWERLEVEL9K_CUSTOM_DEBIAN_ICON="echo -e '\uf306' "
+POWERLEVEL9K_CUSTOM_DEBIAN_ICON_BACKGROUND=234
+POWERLEVEL9K_CUSTOM_DEBIAN_ICON_FOREGROUND=196
+
+## Couleurs
+### Répertoires
+POWERLEVEL9K_DIR_HOME_BACKGROUND=39
+POWERLEVEL9K_DIR_HOME_FOREGROUND=232
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND=39
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND=232
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND=39
+POWERLEVEL9K_DIR_DEFAULT_FOREGROUND=232
+### Heure
+POWERLEVEL9K_TIME_FOREGROUND=232
+### Status
+POWERLEVEL9K_STATUS_OK_BACKGROUND=232
+POWERLEVEL9K_STATUS_OK_FOREGROUND=46
+POWERLEVEL9K_STATUS_ERROR_BACKGROUND=232
+POWERLEVEL9K_STATUS_ERROR_FOREGROUND=196
+### Ssh
+POWERLEVEL9K_SSH_ICON='\uf68c'
+### Root
+POWERLEVEL9K_ROOT_ICON='\uf198 '
+POWERLEVEL9K_ROOT_INDICATOR_BACKGROUND=196
+POWERLEVEL9K_ROOT_INDICATOR_FOREGROUND=232
+### Processus en arrière-plan
+POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND=232
+POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=178
+### Environnement virtuel Python
+POWERLEVEL9K_VIRTUALENV_ICON='\ue235'
+POWERLEVEL9K_VIRTUALENV_BACKGROUND=165
+POWERLEVEL9K_VIRTUALENV_FOREGROUND=232
+### Batterie
+POWERLEVEL9K_BATTERY_STAGES=($'\uf244' $'\uf243' $'\uf242' $'\uf241' $'\uf240') 
+POWERLEVEL9K_BATTERY_LEVEL_BACKGROUND=(196 208 226 118 46)
+POWERLEVEL9K_BATTERY_LOW_FOREGROUND=232
+POWERLEVEL9K_BATTERY_CHARGING_FOREGROUND=232
+POWERLEVEL9K_BATTERY_CHARGED_FOREGROUND=232
+POWERLEVEL9K_BATTERY_DISCONNECTED_FOREGROUND=232
+
+## Configuration du format de l'heure
+POWERLEVEL9K_TIME_FORMAT="%D{\ue383 %H:%M \uf073 %d.%m.%y}"
+
+## Définition des segments du prompt
+### Gauche (première ligne)
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_debian_icon ssh context root_indicator dir dir_writable vcs virtualenv)
+else
+  POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_debian_icon root_indicator dir dir_writable vcs virtualenv)
+fi
+### Droite
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs time air_quality_no2 battery)
+
+## Délai Auto-Update
+export UPDATE_ZSH_DAYS=7
+
+
+
+#######################
+# Plugins Oh My Zsh ! #
+#######################
+plugins=(
+  git
+  zsh-autosuggestions
+  colored-man-pages
+  pyenv
+  z
+  zsh-syntax-highlighting
+)
+
+source $ZSH/oh-my-zsh.sh
+
+
+
+########################
+# Correction de frappe #
+########################
+setopt correct
+
+
+
+#################################
+# Configuration de l'historique #
+#################################
+## Nombre de lignes en mémoire
+HISTSIZE=3000
+
+## Fichier de sauvegarde
+HISTFILE=~/.zsh_history
+
+## Nombre d'entrées à enregistrer
+SAVEHIST=3000
+
+## Suppression des doublons
+HISTDUP=erase
+
+## Ajout des entrées en mode append
+setopt    appendhistory
+
+## Partage de l'historique entre terminaux
+setopt    sharehistory
+
+## Ajout immédiat à l'historique (pas à la fermeture du terminal)
+setopt    incappendhistory
+
+
+
+###########################
+# Configuration de Python #
+###########################
+## Encodage de Python en utf-8
+export PYTHONIOENCODING="utf-8"    
+
+## PyEnv
+if [ -z ${PROFILE_LOADED} ]; then
+    export PROFILE_LOADED=true
+    eval "$(pyenv virtualenv-init -)"
+    eval "$(pyenv init -)"
+fi
+
+
+
+##############
+# Complétion #
+##############
+## Stockage des fichiers de règles de complétion
+fpath=(~/.zsh/completion ${fpath}) 
+
+## Initialisation du système compsys
+autoload -U compinit
+compinit
+ 
+## Affichage du menu de complétion à partir de deux résultats
+zstyle ':completion:*' menu select=2
+
+
+
+###################
+# Liste des alias #
+###################
+alias lc='colorls'
+alias zshconfig='vi ~/.zshrc'
+alias apt='/home/<login>/bin/boost_cmd apt'
